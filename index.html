@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>通胀敏感度研究：解读 · 方法 · 工具</title>
+<!-- 統計：Umami Cloud，與 rand-ai-firms 共用同一個 website，靠 URL 路徑區分 -->
+<script defer src="https://cloud.umami.is/script.js" data-website-id="9360ca08-9c8c-4b91-b978-be3562ea2a8f"></script>
 <!-- 字型非阻塞載入：Google Fonts 在部分地區不可達，載不到就用系統字型 -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;900&display=swap" media="print" onload="this.media='all';this.onload=null">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;900&display=swap"></noscript>
@@ -705,6 +707,44 @@ loadDemo(); renderLibrary(); renderWeights(); run();
   });
   window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
   show(location.hash.slice(1),false);
+})();
+</script>
+<script>
+/* ===== 事件上報層：自動偵測已掛載的統計服務，換服務只改 <head> 那一行 ===== */
+const T=(name,props)=>{try{
+  if(window.plausible)window.plausible(name,{props:props});
+  else if(window.umami&&window.umami.track)window.umami.track(name,props);
+  else if(window.gtag)window.gtag('event',name,props);
+}catch(_){}};
+(function(){
+ const TABS=['read','method','tool'];
+ const seen=new Set([TABS.includes(location.hash.slice(1))?location.hash.slice(1):'read']);
+ document.addEventListener('click',e=>{
+  const a=e.target.closest('a[href^="#"]');if(!a)return;
+  const n=a.getAttribute('href').slice(1);
+  if(!TABS.includes(n))return;
+  seen.add(n);T('tab_switch',{tab:n})});
+ document.querySelectorAll('[data-preset]').forEach(b=>
+  b.addEventListener('click',()=>{seen.add('tool');T('tool_preset',{preset:b.dataset.preset})}));
+
+ /* 停留時間：只計分頁可見且使用者未閒置的秒數 */
+ let eng=0,t0=0,act=0;
+ const MILES=[10,30,60,120,300,600],hit=new Set(),IDLE=120000,now=()=>Date.now();
+ const resume=()=>{if(!t0)t0=now()},pause=()=>{if(t0){eng+=now()-t0;t0=0}};
+ const bucket=s=>s<10?'0-10s':s<30?'10-30s':s<60?'30-60s':s<120?'1-2m':s<300?'2-5m':s<600?'5-10m':'10m+';
+ setInterval(()=>{
+  if(t0&&now()-act>IDLE)pause();
+  const s=Math.round((eng+(t0?now()-t0:0))/1000);
+  for(const m of MILES)if(s>=m&&!hit.has(m)){hit.add(m);T('engaged',{seconds:String(m)})}},5000);
+ const end=()=>{pause();const s=Math.round(eng/1000);
+  if(s<3){eng=0;return}
+  T('dwell',{bucket:bucket(s),seconds:s,tabs:[...seen].join(','),used_tool:seen.has('tool')?'yes':'no'});
+  eng=0;hit.clear()};
+ ['mousedown','keydown','scroll','touchstart','pointermove'].forEach(e=>
+  addEventListener(e,()=>{act=now();resume()},{passive:true}));
+ document.addEventListener('visibilitychange',()=>{document.hidden?end():(act=now(),resume())});
+ addEventListener('pagehide',end);
+ act=now();resume();
 })();
 </script>
 </body>

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""從 FRED 抓宏觀序列，算出同比與通脹新聞 z 值，寫成 data/macro.json。
+"""從 FRED 抓宏觀序列，算出年增率與通膨新聞 z 值，寫成 data/macro.json。
 
 只用標準庫。FRED 的 fredgraph.csv 端點不需要 API 金鑰，但一次要多個序列
 會回傳 ZIP，所以逐一抓取。
@@ -9,18 +9,18 @@ import json, csv, io, os, sys, urllib.request, datetime, statistics
 FRED = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={}&cosd=1960-01-01"
 
 SERIES = [
-    # id,          中文名,            單位,   類型（idx＝指數要算同比；rate＝本身就是%；px＝價格）
-    ("CPIAUCSL",   "CPI 全项",        "%",   "idx"),
+    # id,          中文名,            單位,   類型（idx＝指數要算年增率；rate＝本身就是%；px＝價格）
+    ("CPIAUCSL",   "CPI 全項",        "%",   "idx"),
     ("CPILFESL",   "核心 CPI",        "%",   "idx"),
-    ("PCEPI",      "PCE 物价",        "%",   "idx"),
+    ("PCEPI",      "PCE 物價",        "%",   "idx"),
     ("PCEPILFE",   "核心 PCE",        "%",   "idx"),
-    ("T5YIE",      "5 年期通胀预期",   "%",   "rate"),
-    ("T10YIE",     "10 年期通胀预期",  "%",   "rate"),
-    ("DGS10",      "10 年期国债收益率", "%",   "rate"),
-    ("DFII10",     "10 年期实际利率",  "%",   "rate"),
-    ("FEDFUNDS",   "联邦基金利率",     "%",   "rate"),
-    ("UNRATE",     "失业率",          "%",   "rate"),
-    ("GDPC1",      "实际 GDP",        "%",   "idx"),
+    ("T5YIE",      "5 年期通膨預期",   "%",   "rate"),
+    ("T10YIE",     "10 年期通膨預期",  "%",   "rate"),
+    ("DGS10",      "10 年期公債殖利率", "%",   "rate"),
+    ("DFII10",     "10 年期實質利率",  "%",   "rate"),
+    ("FEDFUNDS",   "聯邦基金利率",     "%",   "rate"),
+    ("UNRATE",     "失業率",          "%",   "rate"),
+    ("GDPC1",      "實質 GDP",        "%",   "idx"),
     ("DCOILWTICO", "WTI 原油",        "美元", "px"),
 ]
 
@@ -47,8 +47,24 @@ def monthly(obs):
         by[d[:7]] = v
     return sorted(by.items())
 
+def detect_freq(obs, compressed):
+    """回傳 (顯示頻率, 原始是否為日頻)。"""
+    daily = len(obs) > len(compressed) * 1.5
+    gaps = []
+    for i in range(max(1, len(compressed) - 25), len(compressed)):
+        a, b = compressed[i - 1][0], compressed[i][0]
+        gaps.append((int(b[:4]) - int(a[:4])) * 12 + int(b[5:7]) - int(a[5:7]))
+    q = sorted(gaps)[len(gaps) // 2] if gaps else 1
+    return ("Q" if q >= 3 else "M"), daily
+
+def fmt_period(d, freq):
+    """季頻顯示成 2026 Q2，月頻原樣。"""
+    if freq != "Q":
+        return d
+    return f"{d[:4]} Q{(int(d[5:7]) - 1) // 3 + 1}"
+
 def yoy(series):
-    """同比變化率，依序列頻率自動判斷回看幾期。"""
+    """年增率變化率，依序列頻率自動判斷回看幾期。"""
     m = dict(series)
     keys = [k for k, _ in series]
     out = []
@@ -63,7 +79,8 @@ def main():
     result, errors = {}, []
     for sid, name, unit, kind in SERIES:
         try:
-            obs = monthly(fetch(sid))
+            raw = fetch(sid)
+            obs = monthly(raw)
         except Exception as e:
             errors.append(f"{sid}: {e}")
             print(f"  ✗ {sid}: {e}", file=sys.stderr)
@@ -76,18 +93,23 @@ def main():
         last_d, last_v = display[-1]
         prev_v = display[-2][1] if len(display) > 1 else None
         yr_ago = dict(display).get(f"{int(last_d[:4])-1:04d}-{last_d[5:7]}")
+        freq, from_daily = detect_freq(raw, obs)
         result[sid] = {
             "name": name, "unit": unit, "kind": kind,
-            "latest": {"date": last_d, "value": round(last_v, 3),
+            "freq": freq, "fromDaily": from_daily,
+            "latest": {"date": last_d, "period": fmt_period(last_d, freq),
+                       "value": round(last_v, 3),
                        "chg": round(last_v - prev_v, 3) if prev_v is not None else None,
                        "chgYr": round(last_v - yr_ago, 3) if yr_ago is not None else None},
             "levelLatest": round(level[-1][1], 3),
             # 只留近 15 年供走勢圖，控制檔案大小
             "hist": [[d, round(v, 3)] for d, v in display if d >= "2011-01"],
         }
-        print(f"  ✓ {sid:<12} {last_d}  {last_v:>8.2f}  （{len(display)} 期）")
+        print(f"  ✓ {sid:<12} {fmt_period(last_d, freq):<9} {last_v:>8.2f}  "
+              f"（{len(display)} 期 · {'季頻' if freq == 'Q' else '月頻'}"
+              f"{' · 原始日頻' if from_daily else ''}）")
 
-    # 通脹新聞：同比 CPI − 12 個月前的同比 CPI，與研究頁的方法一致
+    # 通膨新聞：年增率 CPI − 12 個月前的年增率 CPI，與研究頁的方法一致
     news = None
     if "CPIAUCSL" in result:
         full = yoy(monthly(fetch("CPIAUCSL")))
@@ -103,7 +125,7 @@ def main():
             z = (chg[-1][1] - mu) / sd if sd else 0
             news = {"date": chg[-1][0], "value": round(chg[-1][1], 3), "z": round(z, 2),
                     "mean": round(mu, 3), "sd": round(sd, 3),
-                    "regime": "上行冲击" if z > 1 else ("下行冲击" if z < -1 else "稳定"),
+                    "regime": "上行衝擊" if z > 1 else ("下行衝擊" if z < -1 else "穩定"),
                     "hist": [[d, round(v, 3)] for d, v in chg if d >= "2011-01"]}
 
     out = {

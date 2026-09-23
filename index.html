@@ -166,6 +166,31 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans SC","
 #view-tool button.ghost{padding:5px 8px;font-size:12.5px}
 #view-tool .stat{display:flex;flex-wrap:wrap;gap:18px;font-size:13px;color:var(--muted);margin-bottom:8px}
 #view-tool .stat b{color:var(--ink)}
+#view-data{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans SC","PingFang SC","PingFang TC","Microsoft YaHei","Microsoft JhengHei",system-ui,sans-serif;font-size:14.5px;line-height:1.55}
+#view-data .wrap{max-width:1180px;margin:0 auto;padding:30px 20px 52px}
+#view-data h1{font-family:"Noto Serif SC","Songti SC",serif;font-weight:900;font-size:clamp(24px,3vw,34px);margin:0 0 6px}
+#view-data .lead{color:var(--muted);margin:0 0 22px;max-width:760px}
+#view-data .regime{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--rust);border-radius:8px;padding:18px 22px;margin-bottom:26px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:26px;align-items:center}
+#view-data .regime .z{text-align:center}
+#view-data .regime .zv{font-family:"Noto Serif SC",serif;font-weight:900;font-size:40px;line-height:1}
+#view-data .regime .zl{font-size:12.5px;color:var(--muted)}
+#view-data .regime h2{font-size:17px;margin:0 0 4px}
+#view-data .regime p{margin:0;color:var(--muted);font-size:13.5px}
+#view-data .grp{margin-bottom:26px}
+#view-data .grp>h3{font-size:13px;color:var(--muted);font-weight:500;margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+#view-data .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(224px,1fr));gap:14px}
+#view-data .tile{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+#view-data .tile .nm{font-size:13px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+#view-data .tile .nm em{font-style:normal;font-size:11.5px}
+#view-data .tile .v{font-family:"Noto Serif SC",serif;font-weight:900;font-size:27px;line-height:1.2;margin:2px 0 1px}
+#view-data .tile .v small{font-size:14px;font-weight:400;margin-left:2px}
+#view-data .tile .d{font-size:12px;color:var(--muted)}
+#view-data .tile .d b{font-weight:700}
+#view-data .up{color:var(--rust)} #view-data .down{color:var(--navy)}
+#view-data .spark{display:block;width:100%;height:36px;margin-top:8px}
+#view-data footer{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+#view-data .err{color:var(--rust);font-size:12.5px}
+@media (max-width:640px){#view-data .regime{grid-template-columns:1fr;gap:14px}#view-data .regime .z{text-align:left}}
 @media (max-width:980px){#view-tool .grid{grid-template-columns:1fr}
 #view-tool aside{position:static}
 #view-tool .two{grid-template-columns:1fr}}
@@ -177,6 +202,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans SC","
   <a href="#read" data-tab="read" role="tab">报告解读</a>
   <a href="#method" data-tab="method" role="tab">方法系统图</a>
   <a href="#tool" data-tab="tool" role="tab">宏观敏感度工具</a>
+  <a href="#data" data-tab="data" role="tab">数据监控看板</a>
 </div></div>
 <section class="view" id="view-read" data-view="read">
 <div class="wrap">
@@ -382,6 +408,14 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans SC","
 </div>
 
 <footer>方法提炼与补充检验仅供研究参考，不构成投资建议。原文：AQR Capital Management, Alternative Thinking 2026 Issue 3, Hecht, Ilmanen, Maloney &amp; McQuinn。</footer>
+</div>
+</section>
+<section class="view" id="view-data" data-view="data" hidden>
+<div class="wrap">
+<h1>数据监控看板</h1>
+<p class="lead">本站分析用到的宏观序列，直接取自 FRED 并每日自动更新。通胀新闻的算法与<a href="#tool">宏观敏感度工具</a>一致：同比 CPI 减去 12 个月前的同比 CPI。</p>
+<div id="dash"><p class="lead">载入中…</p></div>
+<footer id="dashfoot"></footer>
 </div>
 </section>
 <section class="view" id="view-tool" data-view="tool" hidden>
@@ -695,7 +729,7 @@ loadDemo(); renderLibrary(); renderWeights(); run();
 (function(){
   const views=document.querySelectorAll('.view'), tabs=document.querySelectorAll('.tabs a');
   function show(name,scroll){
-    if(!['read','method','tool'].includes(name)) name='read';
+    if(!['read','method','tool','data'].includes(name)) name='read';
     views.forEach(v=>v.hidden=v.dataset.view!==name);
     tabs.forEach(t=>t.setAttribute('aria-current',t.dataset.tab===name?'page':'false'));
     if(scroll) window.scrollTo(0,0);
@@ -703,7 +737,7 @@ loadDemo(); renderLibrary(); renderWeights(); run();
   document.addEventListener('click',e=>{
     const a=e.target.closest('a[href^="#"]'); if(!a) return;
     const name=a.getAttribute('href').slice(1);
-    if(['read','method','tool'].includes(name)){e.preventDefault();history.replaceState(null,'','#'+name);show(name,true);}
+    if(['read','method','tool','data'].includes(name)){e.preventDefault();history.replaceState(null,'','#'+name);show(name,true);}
   });
   window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
   show(location.hash.slice(1),false);
@@ -717,7 +751,7 @@ const T=(name,props)=>{try{
   else if(window.gtag)window.gtag('event',name,props);
 }catch(_){}};
 (function(){
- const TABS=['read','method','tool'];
+ const TABS=['read','method','tool','data'];
  const seen=new Set([TABS.includes(location.hash.slice(1))?location.hash.slice(1):'read']);
  document.addEventListener('click',e=>{
   const a=e.target.closest('a[href^="#"]');if(!a)return;
@@ -745,6 +779,60 @@ const T=(name,props)=>{try{
  document.addEventListener('visibilitychange',()=>{document.hidden?end():(act=now(),resume())});
  addEventListener('pagehide',end);
  act=now();resume();
+})();
+</script>
+<script>
+/* ===== 数据监控看板：读取本站的 data/macro.json（由 GitHub Actions 每日更新） ===== */
+(function(){
+ const GROUPS=[
+  ['通胀',['CPIAUCSL','CPILFESL','PCEPI','PCEPILFE']],
+  ['市场预期与利率',['T5YIE','T10YIE','DGS10','DFII10','FEDFUNDS']],
+  ['实体经济与商品',['UNRATE','GDPC1','DCOILWTICO']]];
+ const esc=t=>String(t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+ const fmt=(v,u)=>v==null?'—':(u==='%'?v.toFixed(2):v.toFixed(1));
+ const sign=v=>v==null?'':(v>0?'+':'')+v.toFixed(2);
+ function spark(hist,accent){
+  if(!hist||hist.length<2)return '';
+  const vs=hist.map(h=>h[1]),mn=Math.min(...vs),mx=Math.max(...vs),rg=(mx-mn)||1;
+  const W=200,H=36,P=3;
+  const pts=hist.map((h,i)=>[P+i/(hist.length-1)*(W-2*P),H-P-(h[1]-mn)/rg*(H-2*P)]);
+  const d=pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+  const last=pts[pts.length-1];
+  const zeroY=(mn<0&&mx>0)?(H-P-(0-mn)/rg*(H-2*P)):null;
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">`
+   +(zeroY!=null?`<line x1="0" y1="${zeroY.toFixed(1)}" x2="${W}" y2="${zeroY.toFixed(1)}" stroke="var(--line)" stroke-width="1"/>`:'')
+   +`<polyline points="${d}" fill="none" stroke="${accent}" stroke-width="1.6" vector-effect="non-scaling-stroke"/>`
+   +`<circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="2.2" fill="${accent}"/></svg>`;
+ }
+ function tile(id,s){
+  const L=s.latest,lab=s.kind==='idx'?'同比':(s.kind==='px'?'现货':'水平');
+  const dir=L.chg==null?'':(L.chg>0?'up':(L.chg<0?'down':''));
+  return `<div class="tile"><div class="nm"><span>${esc(s.name)}</span><em>${lab}</em></div>
+   <div class="v">${fmt(L.value,s.unit)}<small>${esc(s.unit)}</small></div>
+   <div class="d">${esc(L.date)}　较上期 <b class="${dir}">${sign(L.chg)}</b>${L.chgYr!=null?`　较去年 <b>${sign(L.chgYr)}</b>`:''}</div>
+   ${spark(s.hist,dir==='up'?'var(--rust)':'var(--navy)')}</div>`;
+ }
+ fetch('data/macro.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(d=>{
+  let h='';
+  const n=d.inflationNews;
+  if(n) h+=`<div class="regime"><div class="z"><div class="zv ${n.z>0?'up':'down'}">${n.z>0?'+':''}${n.z.toFixed(2)}</div><div class="zl">通胀新闻 z 值</div></div>
+   <div><h2>当前处于「${esc(n.regime)}」区间</h2>
+   <p>最新 ${esc(n.date)}：同比 CPI 较 12 个月前 ${n.value>0?'高':'低'} ${Math.abs(n.value).toFixed(2)} 个百分点。
+   报告把 |z|&gt;1 视为通胀冲击期；目前${Math.abs(n.z)>1?'已进入冲击区间':'尚在稳定区间内'}。</p></div></div>`;
+  for(const [name,ids] of GROUPS){
+   const list=ids.filter(i=>d.series[i]);
+   if(!list.length)continue;
+   h+=`<section class="grp"><h3>${esc(name)}</h3><div class="tiles">${list.map(i=>tile(i,d.series[i])).join('')}</div></section>`;
+  }
+  document.getElementById('dash').innerHTML=h;
+  document.getElementById('dashfoot').innerHTML=
+   `数据来源：${esc(d.source)}，每日自动更新，最后更新 ${esc(d.updated)}。走势图为近 15 年。`
+   +(d.errors&&d.errors.length?`<div class="err">${d.errors.length} 个序列抓取失败：${esc(d.errors.join('；'))}</div>`:'')
+   +`<br>仅供研究参考，不构成投资建议。`;
+ }).catch(e=>{
+  document.getElementById('dash').innerHTML=
+   `<p class="err">数据载入失败（${esc(e.message)}）。若在本地以 file:// 开启，浏览器会挡住 fetch，请用 http 服务器。</p>`;
+ });
 })();
 </script>
 </body>

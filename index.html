@@ -208,6 +208,24 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","
 #view-data .rd b{font-weight:500;margin-left:8px}
 #view-data .cv{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
 #view-data .cv text.ax{font-size:9.5px;fill:var(--muted);font-family:ui-monospace,Menlo,monospace}
+#view-data .cv polyline.dim{opacity:.13}
+#view-data .cv .anb{fill:var(--ochre);opacity:.12}
+#view-data .cv .ant{font-size:9.5px;fill:var(--ochre)}
+#view-data .tbtn{all:unset;cursor:pointer;font-size:12px;padding:2px 10px;border:1.5px solid var(--ochre);color:var(--ochre);border-radius:3px;margin-left:auto}
+#view-data .tbtn:hover{background:var(--ochre-soft)}
+#view-data .tbtn:focus-visible{outline:2px solid var(--ochre);outline-offset:2px}
+#view-data .tut{margin-top:10px;background:var(--ochre-soft);border:1px solid var(--ochre);border-radius:6px;padding:13px 16px}
+#view-data .tut[hidden]{display:none}
+#view-data .tut .hd{display:flex;align-items:baseline;gap:10px;margin-bottom:5px}
+#view-data .tut .hd b{font-size:14.5px}
+#view-data .tut .hd span{font-size:11.5px;color:var(--muted);margin-left:auto}
+#view-data .tut p{margin:0 0 8px;font-size:14px;line-height:1.65}
+#view-data .tut .nav{display:flex;gap:8px;align-items:center}
+#view-data .tut .nav button{all:unset;cursor:pointer;font-size:12.5px;padding:3px 12px;border:1px solid var(--line);border-radius:4px;background:var(--panel)}
+#view-data .tut .nav button:hover{border-color:var(--ochre);color:var(--ochre)}
+#view-data .tut .nav button[disabled]{opacity:.35;cursor:default}
+#view-data .tut .nav .x{margin-left:auto;border:0;color:var(--muted)}
+#view-data .tut em{font-style:normal;font-weight:700;color:var(--ochre)}
 #view-data footer{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
 #view-data .err{color:var(--rust);font-size:12.5px}
 @media (max-width:640px){#view-data .regime{grid-template-columns:1fr;gap:14px}#view-data .regime .z{text-align:left}}
@@ -275,18 +293,42 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","
 <p style="margin:0"><b>新手最常在這裡犯錯</b>：看到 CPI 還有 <span class="live" data-live="cpi">—</span>，就覺得「通膨很高，該買抗通膨資產」。但 z 值告訴你的是<b>意外</b>的方向。通膨水平高、但一直在慢慢降，對資產來說是<b>利多</b>而不是利空。水平和新聞是兩件事。</p>
 </div>
 
-<h2><span class="n">02</span>第二步：順便看三個能互相印證的數字</h2>
-<p>還在數據看板這一頁，往下看兩張疊圖。</p>
+<h2><span class="n">02</span>第二步：讓圖自己教你</h2>
+<p>這一步最關鍵，也最容易只看個大概就跳過。所以我把教學直接放在圖旁邊了。</p>
 
 <div class="do">
-<b>動手：</b>在「通膨」那張圖上，比較<b>全項</b>與<b>核心</b>兩條線的距離；在「市場預期與利率」那張圖上，找<b>通膨預期</b>與<b>實質利率</b>。
+<b>動手：</b>到<a href="#data">數據監控看板</a>，每張圖的右上角都有一個「<b>教我看 ↓</b>」按鈕。點下去會一步一步帶你看，<b>每一步會把相關的線highlight、其他淡化，並標出關鍵時期</b>。
 </div>
 
-<dl class="gl">
-<dt>全項 vs 核心</dt><dd>全項 <span class="live" data-live="cpi">—</span>、核心 <span class="live" data-live="core">—</span>。核心剔除食物與能源。全項高於核心，多半是能源在推；核心才代表黏著、不容易掉下來的那部分。</dd>
-<dt>通膨預期</dt><dd>5 年期 <span class="live" data-live="be5">—</span>。這是<b>市場真金白銀押注</b>的未來通膨，不是經濟學家的預測。它跟 CPI 背離時特別值得注意。</dd>
-<dt>實質利率</dt><dd>10 年期 <span class="live" data-live="real10">—</span>。名目利率扣掉通膨預期。這個數字是 2022 年最關鍵的變數——黃金與 TIPS 那年表現糟糕，不是因為通膨沒來，而是<b>實質利率飆升</b>蓋過了通膨補償。</dd>
-</dl>
+<p>四張圖各有自己的教學，加起來十四步。下面先說明它們各自在教什麼，你大致有個底再去點。</p>
+
+<div class="step">
+<b class="t">通膨那張圖（5 步）</b>
+<p><b>先看兩條線的距離。</b>全項 <span class="live" data-live="cpi">—</span>、核心 <span class="live" data-live="core">—</span>。核心剔除食物與能源。距離越大，表示推高通膨的是能源這類會來回波動的東西，<b>通膨越可能是暫時的</b>。</p>
+<p><b>看 2021–22 那座山。</b>四條線同時往上衝 —— 這就是通膨衝擊長的樣子。重點是它們<b>一起</b>動：當全項、核心、PCE 全都同向大漲，就不是單一品項的問題，而是整體物價在動。股債會在這種時候一起跌。</p>
+<p><b>看下山時誰比較慢。</b>全項掉得快、核心跟得慢。能源價格說跌就跌，但服務與房租調整很慢。<b>這個落差就是「黏著性」</b>，也是央行盯核心而不是全項的原因。</p>
+<p style="margin:0"><b>CPI 與 PCE 為什麼不一樣。</b>兩者統計口徑不同 —— CPI 的房租權重高得多，PCE 會把「東西貴了就改買替代品」算進去。<b>Fed 的 2% 目標盯的是核心 PCE，不是 CPI。</b>看新聞時要留意講的是哪一個。</p>
+</div>
+
+<div class="step">
+<b class="t">利率那張圖（4 步）</b>
+<p><b>先拆解一個數字：</b>名目公債殖利率 <span class="live" data-live="nom10">—</span> ≈ 實質利率 <span class="live" data-live="real10">—</span> ＋ 通膨預期 <span class="live" data-live="be10">—</span>。</p>
+<p>看懂這個拆解就看懂債市在想什麼：殖利率上升，究竟是因為<b>市場預期通膨更高</b>，還是因為<b>實質利率被推上去</b>？兩者的含意天差地別。</p>
+<p><b>通膨預期有沒有脫錨</b>是最重要的一條。5 年期現在 <span class="live" data-live="be5">—</span>，長年在 2% 附近。關鍵在於 2022 年 CPI 衝到 9% 時，這條線<b>也沒有失控</b> —— 這就是央行說的「預期仍然錨定」。一旦它開始跟著 CPI 跑，事情才真的嚴重。</p>
+<p style="margin:0"><b>2022 年真正的兇手是實質利率。</b>它從負值一路衝到現在的 <span class="live" data-live="real10">—</span>。黃金與 TIPS 那年表現糟糕不是因為通膨沒來，而是實質利率暴衝蓋過了通膨補償。<b>「對通膨敏感」不等於「通膨來了就會賺」</b> —— 這是整個報告最反直覺的一課。</p>
+</div>
+
+<div class="step">
+<b class="t">實體經濟與商品（5 步）</b>
+<p><b>先學會忽略 2020。</b>那根針（失業率衝到 14.8%）把 y 軸撐得很寬，其他時期都被壓平了。</p>
+<p><b>失業率看方向不看水平。</b>現在 <span class="live" data-live="unrate">—</span>。它的特性是一旦開始上升就很難停下來，歷史上很少小幅回升後就穩住。所以問題不是「4% 算高嗎」，而是「它在往上還是往下」。</p>
+<p style="margin:0"><b>油價是全項與核心差距的主要來源。</b>現在 <span class="live" data-live="oil">—</span> 美元。它直接進 CPI 的能源項。油價大漲時全項會先衝，但<b>如果沒傳導到服務與工資，核心不會跟</b>，那通膨就是暫時的。</p>
+</div>
+
+<div class="box note">
+<p style="margin:0"><b>走完這一步你應該能回答</b>：現在的通膨是能源推的還是核心黏的？市場預期錨定嗎？殖利率上升是通膨預期還是實質利率造成的？<br>
+這三個問題的答案，決定了下一步你該關注四象限的哪一側。</p>
+</div>
 
 <h2><span class="n">03</span>第三步：你手上的東西，怕的是什麼？</h2>
 
@@ -998,7 +1040,7 @@ const T=(name,props)=>{try{
   const out=[];for(let v=Math.ceil(lo/step)*step;v<=hi+1e-9;v+=step)out.push(+v.toFixed(6));
   return out;
  }
- function chart(ids,S,unit){
+ function chart(ids,S,unit,gname){
   const used=ids.filter(i=>S[i]&&S[i].hist&&S[i].hist.length);
   if(!used.length)return '';
   const dates=[...new Set(used.flatMap(i=>S[i].hist.map(h=>h[0])))].sort();
@@ -1019,7 +1061,7 @@ const T=(name,props)=>{try{
   let lines='';const tips=[];
   used.forEach((id,n)=>{
    const c=CLR[n%CLR.length],h=S[id].hist;
-   lines+=`<polyline points="${h.map(p=>X(xi[p[0]]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ')}" fill="none" stroke="${c}" stroke-width="1.6" stroke-linejoin="round"/>`;
+   lines+=`<polyline data-s="${id}" points="${h.map(p=>X(xi[p[0]]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ')}" fill="none" stroke="${c}" stroke-width="1.6" stroke-linejoin="round"/>`;
    const last=h[h.length-1];
    tips.push({x:X(xi[last[0]]),y:Y(last[1]),v:last[1],c:c});
   });
@@ -1034,10 +1076,12 @@ const T=(name,props)=>{try{
    +`<text x="${(W-MR+6)}" y="${(t.ly+3.5).toFixed(1)}" class="ax" fill="${t.c}">${t.v.toFixed(2)}</text>`).join('');
   const legend=used.map((id,n)=>`<span class="lg"><i style="background:${CLR[n%CLR.length]}"></i>${esc(S[id].name)}</span>`).join('');
   const payload=esc(JSON.stringify({dates:dates,ids:used,names:used.map(i=>S[i].name),unit:unit,
+    geo:{ML:ML,MR:MR,MT:MT,MB:MB,W:W,H:H},
     series:used.map(i=>{const m={};S[i].hist.forEach(h=>m[h[0]]=h[1]);return dates.map(d=>m[d]!=null?m[d]:null)})}));
-  return `<div class="ch"><div class="lgs">${legend}<span class="rd" data-rd></span></div>
+  return `<div class="ch" data-g="${esc(gname)}"><div class="lgs">${legend}<span class="rd" data-rd></span><button class="tbtn" data-tut>教我看 ↓</button></div>
+   <div class="tut" data-panel hidden></div>
    <svg viewBox="0 0 ${W} ${H}" class="cv" data-c="${payload}">
-    ${g}${lines}${ends}<g data-hv></g>
+    <g data-an></g>${g}${lines}${ends}<g data-hv></g>
     <rect x="${ML}" y="${MT}" width="${W-ML-MR}" height="${H-MT-MB}" fill="transparent" data-hit/>
    </svg></div>`;
  }
@@ -1049,6 +1093,67 @@ const T=(name,props)=>{try{
    <div class="v">${L.value.toFixed(2)}<small>${esc(S.unit)}</small></div>
    <div class="d">${esc(L.period||L.date)}　較上${q?'季':'月'} <b class="${dir}">${sign(L.chg)}</b>${L.chgYr!=null?`　較去年 <b>${sign(L.chgYr)}</b>`:''}</div></div>`;
  }
+ // 每張圖的手把手步驟：hi＝要highlight的序列，span＝要標出的期間
+ const GUIDES={
+  '通膨':[
+   {t:'先看兩條線的距離',hi:['CPIAUCSL','CPILFESL'],
+    f:(v,at,mx)=>`全項 <em>${v('CPIAUCSL')}%</em>、核心 <em>${v('CPILFESL')}%</em>，差 <em>${(v('CPIAUCSL')-v('CPILFESL')).toFixed(2)}</em> 個百分點。<br>
+    核心是把食物與能源剔除後的數字。全項高於核心，代表推高通膨的主要是能源或食物這類會來回波動的項目；
+    核心才代表<b>黏著、不容易掉下來</b>的那部分。兩條線的距離越大，通膨越可能是暫時的。`},
+   {t:'看 2021–22 那座山',span:['2021-01','2023-06'],
+    f:(v,at,mx)=>`這就是「通膨衝擊」長什麼樣子：四條線同時往上衝，全項最高到 <em>${mx('CPIAUCSL').v.toFixed(2)}%</em>（${mx('CPIAUCSL').d}）。<br>
+    注意它們是<b>一起</b>動的。當全項、核心、PCE 全部同向大幅上行，就不是單一品項的問題，而是整體物價在動 —— 這種時候股債才會一起跌。`},
+   {t:'看下山時誰比較慢',span:['2022-06','2024-12'],hi:['CPIAUCSL','CPILFESL'],
+    f:(v,at,mx)=>`全項從 ${mx('CPIAUCSL').v.toFixed(2)}% 掉下來的速度，明顯快過核心。<br>
+    原因是能源價格跌得快，但服務、房租這些核心項目調整很慢。<b>這個落差就是「黏著性」</b>——也是為什麼央行盯核心而不是全項。`},
+   {t:'CPI 與 PCE 為什麼不一樣',hi:['CPIAUCSL','PCEPI'],
+    f:(v,at,mx)=>`CPI <em>${v('CPIAUCSL')}%</em>、PCE <em>${v('PCEPI')}%</em>。<br>
+    兩者統計口徑不同：CPI 的房租權重高得多，PCE 會把「東西變貴就改買替代品」的行為算進去。
+    <b>Fed 的 2% 目標盯的是核心 PCE，不是 CPI</b>。看新聞時要留意講的是哪一個。`},
+   {t:'那現在呢',
+    f:(v,at,mx)=>`全項 <em>${v('CPIAUCSL')}%</em>、核心 <em>${v('CPILFESL')}%</em>、核心 PCE <em>${v('PCEPILFE')}%</em>。<br>
+    但<b>水平高不等於對資產不利</b> —— 真正影響價格的是「比預期多出多少」。那個數字在這一頁最上面的 z 值，
+    現在是 <em>${window.__Z__||'—'}</em>。水平和新聞是兩件事，這是最多人搞混的地方。`}],
+  '市場預期與利率':[
+   {t:'先拆解一個數字',hi:['DGS10','DFII10','T10YIE'],
+    f:(v,at,mx)=>`名目公債殖利率 <em>${v('DGS10')}%</em> ≈ 實質利率 <em>${v('DFII10')}%</em> ＋ 通膨預期 <em>${v('T10YIE')}%</em>。<br>
+    這三條線是同一件事的三個面向。<b>看懂這個拆解，就看懂了債券市場在想什麼</b>：殖利率上升，
+    到底是因為市場預期通膨更高，還是因為實質利率被推上去，兩者的含意完全不同。`},
+   {t:'看通膨預期有沒有脫錨',hi:['T5YIE','T10YIE'],
+    f:(v,at,mx)=>`兩條通膨預期長年在 2% 附近遊走，現在是 <em>${v('T5YIE')}%</em> 與 <em>${v('T10YIE')}%</em>。<br>
+    關鍵在於：<b>即使 2022 年 CPI 衝到 ${mx('CPIAUCSL').v.toFixed(1)}%，這兩條線也沒有失控</b>。
+    這就是央行說的「預期仍然錨定」——市場相信通膨會回來。一旦這兩條線開始跟著 CPI 跑，事情就嚴重了。`},
+   {t:'2022 年真正的兇手',hi:['DFII10'],span:['2021-12','2023-12'],
+    f:(v,at,mx)=>`實質利率在這段時間從負值一路衝上來，現在 <em>${v('DFII10')}%</em>。<br>
+    <b>這是黃金與 TIPS 在 2022 年表現糟糕的原因</b>，不是因為通膨沒來。TIPS 的價格主要由實質利率決定，
+    實質利率暴衝蓋過了通膨補償。「對通膨敏感」不等於「通膨來了就會賺」。`},
+   {t:'政策利率與長天期的拉鋸',hi:['FEDFUNDS','DGS10'],
+    f:(v,at,mx)=>`聯邦基金 <em>${v('FEDFUNDS')}%</em>、10 年期 <em>${v('DGS10')}%</em>。<br>
+    短端由 Fed 直接控制，長端由市場決定。<b>當短端高於長端（殖利率曲線倒掛），
+    通常代表市場預期經濟會走弱、Fed 之後得降息</b>。兩條線的相對位置比各自的絕對值更有訊息。`}],
+  '實體經濟':[
+   {t:'先解釋那根針',span:['2020-01','2020-12'],
+    f:(v,at,mx)=>`2020 年失業率衝到 <em>${mx('UNRATE').v.toFixed(1)}%</em>，GDP 年增率掉到負值。<br>
+    這根針把 y 軸撐得很寬，所以其他時期看起來都很平。<b>看這張圖時要有意識地忽略 2020</b>，
+    或者把它當成「極端情況長什麼樣」的參考。`},
+   {t:'失業率要看方向不是水平',hi:['UNRATE'],
+    f:(v,at,mx)=>`現在 <em>${v('UNRATE')}%</em>。<br>
+    失業率的特性是<b>一旦開始上升就很難停下來</b>——歷史上它很少小幅回升後就穩住。
+    所以重點不是「4% 算高還是低」，而是「它在往上還是往下」。`},
+   {t:'把它和通膨放在一起看',
+    f:(v,at,mx)=>`成長 <em>${v('GDPC1')}%</em>、失業率 <em>${v('UNRATE')}%</em>、通膨 <em>${v('CPIAUCSL')}%</em>。<br>
+    這兩個維度合起來就是<a href="#tool">四象限</a>的座標：成長強不強、通膨升不升。
+    <b>你手上的資產在哪個象限賺錢，決定了你在賭哪一種組合。</b>`}],
+  '商品':[
+   {t:'油價為什麼放在這裡',
+    f:(v,at,mx)=>`現在 <em>${v('DCOILWTICO')}</em> 美元。<br>
+    油價直接進入 CPI 的能源項，<b>它就是「全項與核心的差距」的主要來源</b>。
+    油價大漲時全項會先衝上去，但如果沒有傳導到服務與工資，核心不會跟，通膨就是暫時的。`},
+   {t:'兩個極端',span:['2020-01','2022-12'],
+    f:(v,at,mx)=>`2020 年崩到 <em>${mx('DCOILWTICO',1).v.toFixed(1)}</em> 美元，2022 年又衝到 <em>${mx('DCOILWTICO').v.toFixed(1)}</em> 美元。<br>
+    <b>商品是四象限裡通膨敏感度最高的資產</b>，但代價就是這種波動 ——
+    在 2008 那種通縮式衰退裡，它會跌得比股票還慘。它不是免費的保險。`}]};
+
  fetch('data/macro.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(d=>{
   let h='';const n=d.inflationNews;
   if(n) h+=`<div class="regime"><div class="z"><div class="zv ${n.z>0?'up':'down'}">${n.z>0?'+':''}${n.z.toFixed(2)}</div><div class="zl">通膨新聞 z 值</div></div>
@@ -1059,7 +1164,7 @@ const T=(name,props)=>{try{
    if(!list.length)continue;
    h+=`<section class="grp"><h3>${esc(name)}<em>單位：${esc(unit)}　同組共用一條 y 軸，可直接互相比較</em></h3>
     <div class="tiles">${list.map(i=>tile(d.series[i])).join('')}</div>
-    ${chart(list,d.series,unit)}</section>`;
+    ${chart(list,d.series,unit,name)}</section>`;
   }
   // 教學頁的即時數字：跟看板同一份資料，不寫死
   (function(){
@@ -1070,7 +1175,9 @@ const T=(name,props)=>{try{
     regime: n?n.regime:'—',
     date: n?n.date:'—',
     cpi: pct('CPIAUCSL'), core: pct('CPILFESL'),
-    be5: pct('T5YIE'), real10: pct('DFII10')};
+    be5: pct('T5YIE'), be10: pct('T10YIE'), real10: pct('DFII10'),
+    nom10: pct('DGS10'), unrate: pct('UNRATE'),
+    oil: g('DCOILWTICO',S=>S.latest.value.toFixed(1))};
    document.querySelectorAll('[data-live]').forEach(el=>{
     const v=map[el.dataset.live]; if(v!=null)el.textContent=v});
   })();
@@ -1081,6 +1188,59 @@ const T=(name,props)=>{try{
    +`<br>公債殖利率、通膨預期、實質利率與原油原始為日頻，這裡取每月最後一個交易日的值。`
    +(d.errors&&d.errors.length?`<div class="err">${d.errors.length} 個序列抓取失敗：${esc(d.errors.join('；'))}</div>`:'')
    +`<br>僅供研究參考，不構成投資建議。`;
+
+  window.__Z__ = n ? (n.z>0?'+':'')+n.z.toFixed(2) : null;
+
+  // 「教我看」：逐步 highlight 對應的線、標出關鍵期間、帶入即時數字
+  (function(){
+   const S=d.series;
+   const v=id=>S[id]?S[id].latest.value.toFixed(2):'—';
+   const at=(id,dt)=>{const h=S[id]&&S[id].hist.find(x=>x[0]===dt);return h?h[1]:null};
+   const mx=(id,min)=>{const h=(S[id]||{}).hist||[];if(!h.length)return{v:0,d:'—'};
+    const p=h.reduce((b,x)=>(min?x[1]<b[1]:x[1]>b[1])?x:b);return{v:p[1],d:p[0]}};
+   const st={};
+   function paint(ch,i){
+    const svg=ch.querySelector('svg'),c=JSON.parse(svg.dataset.c),g=c.geo;
+    const steps=GUIDES[ch.dataset.g]||[],s0=steps[i];
+    svg.querySelectorAll('polyline[data-s]').forEach(pl=>
+     pl.classList.toggle('dim', !!(s0.hi&&s0.hi.length&&!s0.hi.includes(pl.dataset.s))));
+    const an=svg.querySelector('[data-an]');
+    if(s0.span){
+     const k0=c.dates.findIndex(x=>x>=s0.span[0]),k1=c.dates.findIndex(x=>x>=s0.span[1]);
+     const K=c.dates.length-1,X=k=>g.ML+(k<0?K:k)/K*(g.W-g.ML-g.MR);
+     const x0=X(k0),x1=X(k1);
+     an.innerHTML=`<rect class="anb" x="${x0.toFixed(1)}" y="${g.MT}" width="${Math.max(2,x1-x0).toFixed(1)}" height="${g.H-g.MT-g.MB}"/>`
+      +`<text class="ant" x="${((x0+x1)/2).toFixed(1)}" y="${g.MT+11}" text-anchor="middle">${s0.span[0].slice(0,4)}–${s0.span[1].slice(0,4)}</text>`;
+    } else an.innerHTML='';
+    ch.querySelector('[data-panel]').innerHTML=
+     `<div class="hd"><b>${i+1}. ${s0.t}</b><span>第 ${i+1} / ${steps.length} 步</span></div>
+      <p>${s0.f(v,at,mx)}</p>
+      <div class="nav"><button data-p ${i?'':'disabled'}>← 上一步</button>
+      <button data-n ${i<steps.length-1?'':'disabled'}>下一步 →</button>
+      <button class="x" data-x>結束教學</button></div>`;
+   }
+   function stop(ch){
+    ch.querySelector('[data-panel]').hidden=true;
+    ch.querySelector('svg [data-an]').innerHTML='';
+    ch.querySelectorAll('polyline[data-s]').forEach(pl=>pl.classList.remove('dim'));
+    ch.querySelector('[data-tut]').textContent='教我看 ↓';
+   }
+   document.getElementById('dash').addEventListener('click',e=>{
+    const ch=e.target.closest('.ch');if(!ch)return;
+    const steps=GUIDES[ch.dataset.g]||[];
+    if(e.target.closest('[data-tut]')){
+     if(!steps.length)return;
+     const panel=ch.querySelector('[data-panel]');
+     if(!panel.hidden){stop(ch);return}
+     panel.hidden=false;st[ch.dataset.g]=0;paint(ch,0);
+     ch.querySelector('[data-tut]').textContent='收起教學 ↑';
+     T('chart_tutorial',{chart:ch.dataset.g});return;
+    }
+    if(e.target.closest('[data-x]')){stop(ch);return}
+    if(e.target.closest('[data-n]')){st[ch.dataset.g]=Math.min(steps.length-1,(st[ch.dataset.g]||0)+1);paint(ch,st[ch.dataset.g]);return}
+    if(e.target.closest('[data-p]')){st[ch.dataset.g]=Math.max(0,(st[ch.dataset.g]||0)-1);paint(ch,st[ch.dataset.g]);return}
+   });
+  })();
 
   // 滑鼠/觸控讀值
   document.getElementById('dash').addEventListener('pointermove',e=>{

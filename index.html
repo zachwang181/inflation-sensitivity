@@ -827,7 +827,7 @@ const T=(name,props)=>{try{
   }
   document.getElementById('dash').innerHTML=h;
   document.getElementById('dashfoot').innerHTML=
-   `數據來源：${esc(d.source)}，每日自動抓取，最後更新 ${esc(d.updated)}。`+`<br>每張卡片右上角標示口徑與頻率：年增率／水平／現貨，以及月頻或季頻。走勢圖為 2011 年至今。`+`<br>公債殖利率、通膨預期、實質利率與原油原始為日頻，這裡取每月最後一個交易日的值。`
+   `數據來源：${esc(d.source)}，每日自動檢查，資料最後變動於 ${esc(d.updated)}。`+`<br>每張卡片右上角標示口徑與頻率：年增率／水平／現貨，以及月頻或季頻。走勢圖為 2011 年至今。`+`<br>公債殖利率、通膨預期、實質利率與原油原始為日頻，這裡取每月最後一個交易日的值。`
    +(d.errors&&d.errors.length?`<div class="err">${d.errors.length} 個序列抓取失敗：${esc(d.errors.join('；'))}</div>`:'')
    +`<br>僅供研究參考，不構成投資建議。`;
  }).catch(e=>{

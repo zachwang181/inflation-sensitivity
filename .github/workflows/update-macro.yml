@@ -1,8 +1,8 @@
-name: 更新宏观数据
+name: 更新宏觀數據
 
 on:
   schedule:
-    # 每天 UTC 12:00（美东早上 8 点，多数数据在美东 8:30 发布前后）
+    # 每天 UTC 12:00（美東早上 8 點，多數數據在美東 8:30 發布前後）
     - cron: '0 12 * * *'
   workflow_dispatch:
 
@@ -19,17 +19,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: 从 FRED 抓取
+      - name: 從 FRED 抓取
         run: python3 scripts/fetch_macro.py
 
-      - name: 有变化才提交
+      - name: 有變化才提交
         run: |
           if git diff --quiet -- data/macro.json; then
-            echo "数据没有变化，跳过提交"
+            echo "數據沒有變化，跳過提交"
             exit 0
           fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/macro.json
-          git commit -m "更新宏观数据 $(date -u +%Y-%m-%d)"
+          git commit -m "更新宏觀數據 $(date -u +%Y-%m-%d)"
           git push

@@ -137,6 +137,21 @@ def main():
         "errors": errors,
     }
     path = os.path.join(os.path.dirname(__file__), "..", "data", "macro.json")
+
+    # 只有資料真的變了才寫檔。updated 是執行時間戳，每次都會變，
+    # 若連它一起比對，工作流的「有變化才提交」就永遠成立、天天產生空更新。
+    if os.path.exists(path):
+        try:
+            with io.open(path, encoding="utf-8") as f:
+                prev = json.load(f)
+            a = {k: v for k, v in prev.items() if k != "updated"}
+            b = {k: v for k, v in out.items() if k != "updated"}
+            if a == b:
+                print(f"\n資料與現有檔案相同（最後更新 {prev.get('updated')}），不寫檔")
+                return 0
+        except Exception:
+            pass  # 舊檔壞掉就直接覆寫
+
     with io.open(path, "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, separators=(",", ":"))
     print(f"\n寫入 {len(result)}/{len(SERIES)} 個序列 · {os.path.getsize(path)/1024:.1f} KB"

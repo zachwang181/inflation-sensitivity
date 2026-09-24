@@ -1,0 +1,35 @@
+name: 更新宏观数据
+
+on:
+  schedule:
+    # 每天 UTC 12:00（美东早上 8 点，多数数据在美东 8:30 发布前后）
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-macro
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 从 FRED 抓取
+        run: python3 scripts/fetch_macro.py
+
+      - name: 有变化才提交
+        run: |
+          if git diff --quiet -- data/macro.json; then
+            echo "数据没有变化，跳过提交"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/macro.json
+          git commit -m "更新宏观数据 $(date -u +%Y-%m-%d)"
+          git push

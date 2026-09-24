@@ -187,7 +187,16 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","
 #view-data .tile .d{font-size:12px;color:var(--muted)}
 #view-data .tile .d b{font-weight:700}
 #view-data .up{color:var(--rust)} #view-data .down{color:var(--navy)}
-#view-data .spark{display:block;width:100%;height:36px;margin-top:8px}
+#view-data .grp>h3 em{font-style:normal;font-weight:400;margin-left:10px;font-size:11.5px;opacity:.75}
+#view-data .tile .d{font-size:11.5px}
+#view-data .ch{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px 6px;margin-top:14px}
+#view-data .lgs{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;font-size:12.5px;margin-bottom:6px}
+#view-data .lg{display:inline-flex;align-items:center;gap:6px;color:var(--muted)}
+#view-data .lg i{width:14px;height:2.5px;border-radius:2px;display:inline-block}
+#view-data .rd{margin-left:auto;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;min-height:1.2em;text-align:right}
+#view-data .rd b{font-weight:500;margin-left:8px}
+#view-data .cv{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
+#view-data .cv text.ax{font-size:9.5px;fill:var(--muted);font-family:ui-monospace,Menlo,monospace}
 #view-data footer{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
 #view-data .err{color:var(--rust);font-size:12.5px}
 @media (max-width:640px){#view-data .regime{grid-template-columns:1fr;gap:14px}#view-data .regime .z{text-align:left}}
@@ -784,55 +793,116 @@ const T=(name,props)=>{try{
 <script>
 /* ===== 數據監控看板：讀取本站的 data/macro.json（由 GitHub Actions 每日更新） ===== */
 (function(){
+ // 同單位的序列才疊在同一張圖，否則尺度會互相壓扁
  const GROUPS=[
-  ['通膨',['CPIAUCSL','CPILFESL','PCEPI','PCEPILFE']],
-  ['市場預期與利率',['T5YIE','T10YIE','DGS10','DFII10','FEDFUNDS']],
-  ['實體經濟與商品',['UNRATE','GDPC1','DCOILWTICO']]];
- const esc=t=>String(t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
- const fmt=(v,u)=>v==null?'—':(u==='%'?v.toFixed(2):v.toFixed(1));
- const sign=v=>v==null?'':(v>0?'+':'')+v.toFixed(2);
- function spark(hist,accent){
-  if(!hist||hist.length<2)return '';
-  const vs=hist.map(h=>h[1]),mn=Math.min(...vs),mx=Math.max(...vs),rg=(mx-mn)||1;
-  const W=200,H=36,P=3;
-  const pts=hist.map((h,i)=>[P+i/(hist.length-1)*(W-2*P),H-P-(h[1]-mn)/rg*(H-2*P)]);
-  const d=pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
-  const last=pts[pts.length-1];
-  const zeroY=(mn<0&&mx>0)?(H-P-(0-mn)/rg*(H-2*P)):null;
-  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">`
-   +(zeroY!=null?`<line x1="0" y1="${zeroY.toFixed(1)}" x2="${W}" y2="${zeroY.toFixed(1)}" stroke="var(--line)" stroke-width="1"/>`:'')
-   +`<polyline points="${d}" fill="none" stroke="${accent}" stroke-width="1.6" vector-effect="non-scaling-stroke"/>`
-   +`<circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="2.2" fill="${accent}"/></svg>`;
+  ['通膨',['CPIAUCSL','CPILFESL','PCEPI','PCEPILFE'],'%'],
+  ['市場預期與利率',['T5YIE','T10YIE','DGS10','DFII10','FEDFUNDS'],'%'],
+  ['實體經濟',['UNRATE','GDPC1'],'%'],
+  ['商品',['DCOILWTICO'],'美元']];
+ const CLR=['#E0A948','#6FA6DA','#E08A73','#6FD1B0','#B8A4E3'];
+ const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ const sign=v=>v==null?'—':(v>0?'+':'')+v.toFixed(2);
+ const W=760,H=250,ML=44,MR=58,MT=14,MB=26;
+
+ function niceTicks(lo,hi,n){
+  const raw=(hi-lo)/n,mag=Math.pow(10,Math.floor(Math.log10(raw)));
+  const step=[1,1.5,2,2.5,3,4,5,6,8,10].map(m=>m*mag).find(s=>s>=raw)||10*mag;
+  const out=[];for(let v=Math.ceil(lo/step)*step;v<=hi+1e-9;v+=step)out.push(+v.toFixed(6));
+  return out;
  }
- function tile(id,s){
-  const L=s.latest,q=s.freq==='Q';
-  const lab=(s.kind==='idx'?'年增率':(s.kind==='px'?'現貨':'水平'))+'．'+(q?'季':'月');
+ function chart(ids,S,unit){
+  const used=ids.filter(i=>S[i]&&S[i].hist&&S[i].hist.length);
+  if(!used.length)return '';
+  const dates=[...new Set(used.flatMap(i=>S[i].hist.map(h=>h[0])))].sort();
+  const xi={};dates.forEach((d,k)=>xi[d]=k);
+  const vals=used.flatMap(i=>S[i].hist.map(h=>h[1]));
+  let lo=Math.min(...vals),hi=Math.max(...vals);
+  const pad=(hi-lo)*0.12||1; lo-=pad; hi+=pad;
+  const X=k=>ML+k/(dates.length-1)*(W-ML-MR);
+  const Y=v=>MT+(hi-v)/(hi-lo)*(H-MT-MB);
+  let g='';
+  for(const t of niceTicks(lo,hi,6))
+   g+=`<line x1="${ML}" y1="${Y(t).toFixed(1)}" x2="${W-MR}" y2="${Y(t).toFixed(1)}" stroke="var(--line)" stroke-width=".7"/>`
+     +`<text x="${ML-6}" y="${(Y(t)+3.5).toFixed(1)}" text-anchor="end" class="ax">${t}</text>`;
+  const yrs=[...new Set(dates.map(d=>d.slice(0,4)))].filter(y=>+y%3===0);
+  for(const y of yrs){const k=dates.findIndex(d=>d.slice(0,4)===y);if(k<0)continue;
+   g+=`<line x1="${X(k).toFixed(1)}" y1="${MT}" x2="${X(k).toFixed(1)}" y2="${H-MB}" stroke="var(--line)" stroke-width=".5" opacity=".6"/>`
+     +`<text x="${X(k).toFixed(1)}" y="${H-MB+15}" text-anchor="middle" class="ax">${y}</text>`;}
+  let lines='';const tips=[];
+  used.forEach((id,n)=>{
+   const c=CLR[n%CLR.length],h=S[id].hist;
+   lines+=`<polyline points="${h.map(p=>X(xi[p[0]]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ')}" fill="none" stroke="${c}" stroke-width="1.6" stroke-linejoin="round"/>`;
+   const last=h[h.length-1];
+   tips.push({x:X(xi[last[0]]),y:Y(last[1]),v:last[1],c:c});
+  });
+  // 線末標籤防重疊：由上往下推開，至少間隔 11
+  tips.sort((a,b)=>a.y-b.y);
+  tips.forEach((t,i)=>{t.ly=i?Math.max(t.y,tips[i-1].ly+11):t.y});
+  const over=tips.length?tips[tips.length-1].ly-(H-MB):0;
+  if(over>0)tips.forEach(t=>t.ly-=over);
+  const ends=tips.map(t=>
+   `<circle cx="${t.x.toFixed(1)}" cy="${t.y.toFixed(1)}" r="2.6" fill="${t.c}"/>`
+   +(Math.abs(t.ly-t.y)>1?`<line x1="${(t.x+3).toFixed(1)}" y1="${t.y.toFixed(1)}" x2="${(W-MR+3)}" y2="${t.ly.toFixed(1)}" stroke="${t.c}" stroke-width=".6" opacity=".55"/>`:'')
+   +`<text x="${(W-MR+6)}" y="${(t.ly+3.5).toFixed(1)}" class="ax" fill="${t.c}">${t.v.toFixed(2)}</text>`).join('');
+  const legend=used.map((id,n)=>`<span class="lg"><i style="background:${CLR[n%CLR.length]}"></i>${esc(S[id].name)}</span>`).join('');
+  const payload=esc(JSON.stringify({dates:dates,ids:used,names:used.map(i=>S[i].name),unit:unit,
+    series:used.map(i=>{const m={};S[i].hist.forEach(h=>m[h[0]]=h[1]);return dates.map(d=>m[d]!=null?m[d]:null)})}));
+  return `<div class="ch"><div class="lgs">${legend}<span class="rd" data-rd></span></div>
+   <svg viewBox="0 0 ${W} ${H}" class="cv" data-c="${payload}">
+    ${g}${lines}${ends}<g data-hv></g>
+    <rect x="${ML}" y="${MT}" width="${W-ML-MR}" height="${H-MT-MB}" fill="transparent" data-hit/>
+   </svg></div>`;
+ }
+ function tile(S){
+  const L=S.latest,q=S.freq==='Q';
+  const lab=(S.kind==='idx'?'年增率':(S.kind==='px'?'現貨':'水平'))+'．'+(q?'季':'月');
   const dir=L.chg==null?'':(L.chg>0?'up':(L.chg<0?'down':''));
-  return `<div class="tile"><div class="nm"><span>${esc(s.name)}</span><em>${lab}</em></div>
-   <div class="v">${fmt(L.value,s.unit)}<small>${esc(s.unit)}</small></div>
-   <div class="d">${esc(L.period||L.date)}　較上${q?'季':'月'} <b class="${dir}">${sign(L.chg)}</b>${L.chgYr!=null?`　較去年 <b>${sign(L.chgYr)}</b>`:''}</div>
-   ${spark(s.hist,dir==='up'?'var(--rust)':'var(--navy)')}</div>`;
+  return `<div class="tile"><div class="nm"><span>${esc(S.name)}</span><em>${lab}</em></div>
+   <div class="v">${L.value.toFixed(2)}<small>${esc(S.unit)}</small></div>
+   <div class="d">${esc(L.period||L.date)}　較上${q?'季':'月'} <b class="${dir}">${sign(L.chg)}</b>${L.chgYr!=null?`　較去年 <b>${sign(L.chgYr)}</b>`:''}</div></div>`;
  }
  fetch('data/macro.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(d=>{
-  let h='';
-  const n=d.inflationNews;
+  let h='';const n=d.inflationNews;
   if(n) h+=`<div class="regime"><div class="z"><div class="zv ${n.z>0?'up':'down'}">${n.z>0?'+':''}${n.z.toFixed(2)}</div><div class="zl">通膨新聞 z 值</div></div>
    <div><h2>當前處於「${esc(n.regime)}」區間</h2>
-   <p>最新 ${esc(n.date)}：CPI 年增率 較 12 個月前 ${n.value>0?'高':'低'} ${Math.abs(n.value).toFixed(2)} 個百分點。
-   報告把 |z|&gt;1 視為通膨衝擊期；目前${Math.abs(n.z)>1?'已進入衝擊區間':'尚在穩定區間內'}。</p></div></div>`;
-  for(const [name,ids] of GROUPS){
+   <p>最新 ${esc(n.date)}：CPI 年增率較 12 個月前${n.value>0?'高':'低'} ${Math.abs(n.value).toFixed(2)} 個百分點。報告把 |z|&gt;1 視為通膨衝擊期；目前${Math.abs(n.z)>1?'已進入衝擊區間':'尚在穩定區間內'}。</p></div></div>`;
+  for(const [name,ids,unit] of GROUPS){
    const list=ids.filter(i=>d.series[i]);
    if(!list.length)continue;
-   h+=`<section class="grp"><h3>${esc(name)}</h3><div class="tiles">${list.map(i=>tile(i,d.series[i])).join('')}</div></section>`;
+   h+=`<section class="grp"><h3>${esc(name)}<em>單位：${esc(unit)}　同組共用一條 y 軸，可直接互相比較</em></h3>
+    <div class="tiles">${list.map(i=>tile(d.series[i])).join('')}</div>
+    ${chart(list,d.series,unit)}</section>`;
   }
   document.getElementById('dash').innerHTML=h;
   document.getElementById('dashfoot').innerHTML=
-   `數據來源：${esc(d.source)}，每日自動檢查，資料最後變動於 ${esc(d.updated)}。`+`<br>每張卡片右上角標示口徑與頻率：年增率／水平／現貨，以及月頻或季頻。走勢圖為 2011 年至今。`+`<br>公債殖利率、通膨預期、實質利率與原油原始為日頻，這裡取每月最後一個交易日的值。`
+   `數據來源：${esc(d.source)}，每日自動檢查，資料最後變動於 ${esc(d.updated)}。`
+   +`<br>卡片右上角是口徑與頻率；圖為 2011 年至今，滑鼠移上去可看任一時點的所有數值。`
+   +`<br>公債殖利率、通膨預期、實質利率與原油原始為日頻，這裡取每月最後一個交易日的值。`
    +(d.errors&&d.errors.length?`<div class="err">${d.errors.length} 個序列抓取失敗：${esc(d.errors.join('；'))}</div>`:'')
    +`<br>僅供研究參考，不構成投資建議。`;
+
+  // 滑鼠/觸控讀值
+  document.getElementById('dash').addEventListener('pointermove',e=>{
+   const hit=e.target.closest('[data-hit]');if(!hit)return;
+   const svg=hit.closest('svg'),box=svg.getBoundingClientRect();
+   const c=JSON.parse(svg.dataset.c);
+   const px=(e.clientX-box.left)/box.width*W;
+   let k=Math.round((px-ML)/(W-ML-MR)*(c.dates.length-1));
+   k=Math.max(0,Math.min(c.dates.length-1,k));
+   const x=ML+k/(c.dates.length-1)*(W-ML-MR);
+   svg.querySelector('[data-hv]').innerHTML=
+    `<line x1="${x.toFixed(1)}" y1="${MT}" x2="${x.toFixed(1)}" y2="${H-MB}" stroke="var(--ink)" stroke-width=".8" opacity=".5"/>`;
+   const parts=c.ids.map((id,i)=>{const v=c.series[i][k];
+    return v==null?'':`<b style="color:${CLR[i%CLR.length]}">${c.names[i]} ${v.toFixed(2)}</b>`}).filter(Boolean);
+   svg.closest('.ch').querySelector('[data-rd]').innerHTML=`${c.dates[k]}　${parts.join('　')}`;
+  });
+  document.getElementById('dash').addEventListener('pointerleave',e=>{
+   document.querySelectorAll('#dash [data-hv]').forEach(g=>g.innerHTML='');
+   document.querySelectorAll('#dash [data-rd]').forEach(r=>r.innerHTML='');
+  },true);
  }).catch(e=>{
   document.getElementById('dash').innerHTML=
-   `<p class="err">數據載入失敗（${esc(e.message)}）。若在本地以 file:// 開啟，瀏覽器會擋住 fetch，請用 http 服務器。</p>`;
+   `<p class="err">數據載入失敗（${esc(e.message)}）。若在本地以 file:// 開啟，瀏覽器會擋住 fetch，請用 http 伺服器。</p>`;
  });
 })();
 </script>

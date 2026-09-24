@@ -32,48 +32,59 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","
 .tabs a[aria-current="page"]{background:var(--navy);color:var(--panel)}
 .tabs a:focus-visible{outline:2px solid var(--ochre);outline-offset:2px}
 .view[hidden]{display:none}
-#view-read{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","PingFang SC","Microsoft JhengHei","Microsoft YaHei",system-ui,sans-serif;font-size:16px;line-height:1.8}
-#view-read .wrap{max-width:860px;margin:0 auto;padding:36px 22px 64px}
-#view-read nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
-#view-read nav a{font-size:13.5px;text-decoration:none;color:var(--navy);border:1px solid var(--navy);border-radius:999px;padding:4px 12px}
-#view-read nav a.here{background:var(--navy);color:var(--panel)}
-#view-read h1{font-family:"Noto Serif TC","Songti TC","Songti SC","STSong",serif;font-weight:900;font-size:clamp(28px,4.2vw,42px);line-height:1.25;margin:0 0 12px}
-#view-read .lead{color:var(--muted);font-size:17px;margin:0 0 30px}
-#view-read h2{font-family:"Noto Serif TC","Songti TC","Songti SC","STSong",serif;font-size:24px;margin:52px 0 14px;padding-top:18px;border-top:1px solid var(--line)}
-#view-read h2 .n{color:var(--ochre);margin-right:10px}
-#view-read h3{font-size:17px;margin:26px 0 6px}
-#view-read p{margin:0 0 14px}
-#view-read a{color:var(--navy)}
-#view-read .box{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px 20px;margin:18px 0}
-#view-read .box.note{border-left:5px solid var(--ochre);background:var(--ochre-soft)}
-#view-read .box.key{border-left:5px solid var(--navy)}
-#view-read .formula{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:20px;background:var(--navy-soft);padding:14px 18px;border-radius:6px;overflow-x:auto;white-space:nowrap;margin:14px 0}
-#view-read .tbl{overflow-x:auto;margin:16px 0}
-#view-read table{border-collapse:collapse;width:100%;font-size:14.5px;background:var(--panel)}
-#view-read th,#view-read td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
-#view-read th:first-child,#view-read td:first-child{text-align:left}
-#view-read th{color:var(--muted);font-weight:500;background:var(--bg)}
-#view-read td.l,#view-read th.l{text-align:left;white-space:normal}
-#view-read .quad{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:18px 0;font-size:14.5px}
-#view-read .quad div{padding:14px 16px;border-radius:6px}
-#view-read .quad b{display:block;font-size:15.5px;margin-bottom:2px}
-#view-read .q1{background:var(--q-gold)}
-#view-read .q2{background:var(--q-over)}
-#view-read .q3{background:var(--q-rec)}
-#view-read .q4{background:var(--q-stag)}
-#view-read .axis{font-size:12.5px;color:var(--muted);text-align:center;margin-top:-10px}
-#view-read ol.chain{padding-left:0;list-style:none;counter-reset:c}
-#view-read ol.chain>li{counter-increment:c;position:relative;padding-left:44px;margin-bottom:20px}
-#view-read ol.chain>li::before{content:counter(c);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--navy);color:var(--panel);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px}
-#view-read .crit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-#view-read .crit .box{margin:0}
-#view-read .crit b{display:block;margin-bottom:4px}
-#view-read .pos{color:var(--rust);font-weight:700}
-#view-read .neg{color:var(--navy);font-weight:700}
-#view-read footer{margin-top:54px;padding-top:18px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
-@media (max-width:640px){#view-read .crit{grid-template-columns:1fr}
-#view-read .wrap{padding:24px 16px 48px}
-#view-read{font-size:15.5px}}
+.doc{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","PingFang SC","Microsoft JhengHei","Microsoft YaHei",system-ui,sans-serif;font-size:16px;line-height:1.8}
+.doc .wrap{max-width:860px;margin:0 auto;padding:36px 22px 64px}
+.doc nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.doc nav a{font-size:13.5px;text-decoration:none;color:var(--navy);border:1px solid var(--navy);border-radius:999px;padding:4px 12px}
+.doc nav a.here{background:var(--navy);color:var(--panel)}
+.doc h1{font-family:"Noto Serif TC","Songti TC","Songti SC","STSong",serif;font-weight:900;font-size:clamp(28px,4.2vw,42px);line-height:1.25;margin:0 0 12px}
+.doc .lead{color:var(--muted);font-size:17px;margin:0 0 30px}
+.doc h2{font-family:"Noto Serif TC","Songti TC","Songti SC","STSong",serif;font-size:24px;margin:52px 0 14px;padding-top:18px;border-top:1px solid var(--line)}
+.doc h2 .n{color:var(--ochre);margin-right:10px}
+.doc h3{font-size:17px;margin:26px 0 6px}
+.doc p{margin:0 0 14px}
+.doc a{color:var(--navy)}
+.doc .box{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px 20px;margin:18px 0}
+.doc .box.note{border-left:5px solid var(--ochre);background:var(--ochre-soft)}
+.doc .box.key{border-left:5px solid var(--navy)}
+.doc .formula{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:20px;background:var(--navy-soft);padding:14px 18px;border-radius:6px;overflow-x:auto;white-space:nowrap;margin:14px 0}
+.doc .tbl{overflow-x:auto;margin:16px 0}
+.doc table{border-collapse:collapse;width:100%;font-size:14.5px;background:var(--panel)}
+.doc th,.doc td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.doc th:first-child,.doc td:first-child{text-align:left}
+.doc th{color:var(--muted);font-weight:500;background:var(--bg)}
+.doc td.l,.doc th.l{text-align:left;white-space:normal}
+.doc .quad{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:18px 0;font-size:14.5px}
+.doc .quad div{padding:14px 16px;border-radius:6px}
+.doc .quad b{display:block;font-size:15.5px;margin-bottom:2px}
+.doc .q1{background:var(--q-gold)}
+.doc .q2{background:var(--q-over)}
+.doc .q3{background:var(--q-rec)}
+.doc .q4{background:var(--q-stag)}
+.doc .axis{font-size:12.5px;color:var(--muted);text-align:center;margin-top:-10px}
+.doc ol.chain{padding-left:0;list-style:none;counter-reset:c}
+.doc ol.chain>li{counter-increment:c;position:relative;padding-left:44px;margin-bottom:20px}
+.doc ol.chain>li::before{content:counter(c);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--navy);color:var(--panel);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px}
+.doc .crit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.doc .crit .box{margin:0}
+.doc .crit b{display:block;margin-bottom:4px}
+.doc .pos{color:var(--rust);font-weight:700}
+.doc .neg{color:var(--navy);font-weight:700}
+.doc .step{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--navy);border-radius:0 8px 8px 0;padding:14px 20px;margin:14px 0}
+.doc .step b.t{display:block;font-size:15px;margin-bottom:4px}
+.doc .do{background:var(--ochre-soft);border:1px solid var(--ochre);border-radius:6px;padding:12px 16px;margin:12px 0;font-size:15px}
+.doc .do b{color:var(--ochre)}
+.doc .live{font-variant-numeric:tabular-nums;font-weight:700;color:var(--rust)}
+.doc .wrong{border-left:5px solid var(--rust)}
+.doc .wrong b{color:var(--rust)}
+.doc dl.gl{margin:14px 0;display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:15px}
+.doc dl.gl dt{font-weight:700;white-space:nowrap}
+.doc dl.gl dd{margin:0;color:var(--muted)}
+@media (max-width:640px){.doc dl.gl{grid-template-columns:1fr;gap:2px}.doc dl.gl dd{margin-bottom:8px}}
+.doc footer{margin-top:54px;padding-top:18px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+@media (max-width:640px){.doc .crit{grid-template-columns:1fr}
+.doc .wrap{padding:24px 16px 48px}
+.doc{font-size:15.5px}}
 #view-map{margin:0;background:var(--bg);color:var(--ink);
   font-family:"Noto Sans TC","PingFang TC","PingFang SC","Microsoft JhengHei","Microsoft YaHei",system-ui,sans-serif;
   font-size:15px;line-height:1.6}
@@ -208,12 +219,189 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","
 <body>
 <div class="tabs"><div class="tabs-in" role="tablist" aria-label="頁面切換">
   <span class="brand">通膨敏感度研究</span>
+  <a href="#guide" data-tab="guide" role="tab">新手教學</a>
   <a href="#read" data-tab="read" role="tab">報告解讀</a>
   <a href="#method" data-tab="method" role="tab">方法系統圖</a>
   <a href="#tool" data-tab="tool" role="tab">宏觀敏感度工具</a>
   <a href="#data" data-tab="data" role="tab">數據監控看板</a>
 </div></div>
-<section class="view" id="view-read" data-view="read">
+<section class="view doc" id="view-guide" data-view="guide" hidden>
+<div class="wrap">
+
+<h1>新手教學：怎麼走完一次通膨分析</h1>
+<p class="lead">假設你完全沒聽過「偏相關」「breakeven」這些詞。這一頁帶你用這個網站的工具，從頭走一次，最後得到一個對你自己有用的結論：<b>我現在的部位，怕的是哪一種環境？</b></p>
+
+<div class="box key">
+<p style="margin:0"><b>先講結論會長什麼樣</b>：走完之後你會有一句話，像是「我的部位集中在成長資產，通膨敏感度大約 −0.2，意思是通膨意外上行時我會受傷，而我手上沒有任何能在那種環境下賺錢的東西。」<br>
+這句話不告訴你該買什麼，但它讓你知道自己在賭什麼。</p>
+</div>
+
+<h2><span class="n">00</span>先分清楚三組最容易搞混的東西</h2>
+<p>這三組不分清楚，後面每張圖都會看錯。</p>
+
+<div class="step">
+<b class="t">一、水平 ≠ 變化 ≠ 新聞</b>
+<p>CPI 年增率 <span class="live" data-live="cpi">—</span> 是<b>水平</b>；它比上個月高了多少是<b>變化</b>；而<b>新聞</b>是「比大家原本以為的多出多少」。</p>
+<p style="margin:0">為什麼重要？因為資產價格早就把「大家都知道的通膨」算進去了。通膨維持 3% 十年，股市不會因此每年跌。<b>只有意外的部分才會讓價格動。</b>所以整個報告量的都是新聞，不是水平。</p>
+</div>
+
+<div class="step">
+<b class="t">二、相關係數 ≠ 衝擊大小</b>
+<p style="margin:0">兩個資產對通膨的相關係數都是 −0.4，但一個年化波動 5%、另一個 20%，實際被打擊的幅度差四倍。相關係數只講<b>方向與一致性</b>，不講<b>力道</b>。力道要看 beta。</p>
+</div>
+
+<div class="step">
+<b class="t">三、平均 ≠ 每一次</b>
+<p style="margin:0">相關係數是把 50 年壓成一個數字。商品的通膨相關是正的，但那是平均——在 2008 年那種「通縮式衰退」裡，商品跌得比股票還慘。<b>平均值會藏起尾巴。</b></p>
+</div>
+
+<h2><span class="n">01</span>第一步：現在是什麼環境？</h2>
+<p>任何分析都要先知道自己站在哪裡。</p>
+
+<div class="do">
+<b>動手：</b>打開<a href="#data">數據監控看板</a>，看最上面那個大數字。
+</div>
+
+<p>那是<b>通膨新聞 z 值</b>，目前是 <span class="live" data-live="z">—</span>（<span class="live" data-live="regime">—</span>，資料截至 <span class="live" data-live="date">—</span>）。它的算法很土：<b>把 CPI 年增率減去 12 個月前的 CPI 年增率</b>，再看這個差距相對歷史是大是小。</p>
+<p>為什麼這樣算？因為最簡單的預期就是「明年跟今年差不多」。偏離這個預期的部分，就是新聞。</p>
+
+<dl class="gl">
+<dt>z &gt; +1</dt><dd>通膨意外往上衝。歷史上股債會一起跌，商品與趨勢策略表現最好。</dd>
+<dt>z &lt; −1</dt><dd>通膨意外回落。傳統股債組合的黃金時期。</dd>
+<dt>−1 到 +1</dt><dd>穩定區間。報告指出這種環境歷史上對應最強的股市報酬、最弱的趨勢策略表現。</dd>
+</dl>
+
+<div class="box note">
+<p style="margin:0"><b>新手最常在這裡犯錯</b>：看到 CPI 還有 <span class="live" data-live="cpi">—</span>，就覺得「通膨很高，該買抗通膨資產」。但 z 值告訴你的是<b>意外</b>的方向。通膨水平高、但一直在慢慢降，對資產來說是<b>利多</b>而不是利空。水平和新聞是兩件事。</p>
+</div>
+
+<h2><span class="n">02</span>第二步：順便看三個能互相印證的數字</h2>
+<p>還在數據看板這一頁，往下看兩張疊圖。</p>
+
+<div class="do">
+<b>動手：</b>在「通膨」那張圖上，比較<b>全項</b>與<b>核心</b>兩條線的距離；在「市場預期與利率」那張圖上，找<b>通膨預期</b>與<b>實質利率</b>。
+</div>
+
+<dl class="gl">
+<dt>全項 vs 核心</dt><dd>全項 <span class="live" data-live="cpi">—</span>、核心 <span class="live" data-live="core">—</span>。核心剔除食物與能源。全項高於核心，多半是能源在推；核心才代表黏著、不容易掉下來的那部分。</dd>
+<dt>通膨預期</dt><dd>5 年期 <span class="live" data-live="be5">—</span>。這是<b>市場真金白銀押注</b>的未來通膨，不是經濟學家的預測。它跟 CPI 背離時特別值得注意。</dd>
+<dt>實質利率</dt><dd>10 年期 <span class="live" data-live="real10">—</span>。名目利率扣掉通膨預期。這個數字是 2022 年最關鍵的變數——黃金與 TIPS 那年表現糟糕，不是因為通膨沒來，而是<b>實質利率飆升</b>蓋過了通膨補償。</dd>
+</dl>
+
+<h2><span class="n">03</span>第三步：你手上的東西，怕的是什麼？</h2>
+
+<div class="do">
+<b>動手：</b>打開<a href="#tool">宏觀敏感度工具</a>，左側按「<b>對照 AQR 原圖</b>」，然後看中間那張四象限圖。
+</div>
+
+<p>橫軸是通膨敏感度、縱軸是成長敏感度。每個點的位置回答一個問題：<b>這個資產在哪種環境下會賺錢？</b></p>
+
+<div class="quad" role="img" aria-label="四象限">
+  <div class="q1"><b>左上・金髮女孩</b>成長好、通膨降。美股、60/40、信用債、私募幾乎全在這裡。</div>
+  <div class="q2"><b>右上・過熱</b>成長強、通膨也升。能源股、商品。</div>
+  <div class="q3"><b>左下・衰退</b>成長弱、通膨降。美國公債、投資級債。</div>
+  <div class="q4"><b>右下・滯脹</b>成長弱、通膨升。黃金、Breakevens、價格趨勢。</div>
+</div>
+<p class="axis">← 通膨敏感度為負　｜　通膨敏感度為正 →</p>
+
+<p><b>關鍵觀察</b>：絕大多數人的資產都擠在左上角。這代表一件事——你不是「沒有押注」，你是<b>重押「成長好、通膨低」</b>，只是你可能沒意識到。</p>
+
+<div class="do">
+<b>動手：</b>在左側資產庫裡，只勾選你實際持有的類別（例如只勾美股、公債），看它們落在哪。
+</div>
+
+<h2><span class="n">04</span>第四步：先問「這個數字是真的嗎」</h2>
+<p>這一步最容易被跳過，但它會擋掉一半的錯誤結論。</p>
+
+<div class="do">
+<b>動手：</b>在工具頁的「數值結果」表格，<b>只看粗體的那幾行</b>。
+</div>
+
+<p>粗體代表統計上顯著。沒粗體的，數值再好看都跟零沒有差別。</p>
+<p>原因是<b>樣本比看起來少很多</b>：資料從 1972 年到現在有 218 個季度觀測，但每個觀測用的是滾動 12 個月報酬，相鄰觀測有四分之三是重疊的。真正獨立的樣本只有大約 54 個，相關係數的 95% 信賴區間大約是 <b>±0.27</b>。</p>
+
+<div class="box note">
+<p style="margin:0">意思是：圖上擠在原點附近那一大群點——多空品質、多空動量、通膨連結債、多因子、經濟趨勢——<b>在統計上都無法和零區分</b>。真正站得住的只有遠端那幾個：美股與 60/40 的成長敏感度、公債與投資級債的負通膨敏感度、Breakevens 與商品的正通膨敏感度。</p>
+</div>
+
+<h2><span class="n">05</span>第五步：把相關係數換算成「會痛多少」</h2>
+
+<div class="do">
+<b>動手：</b>同一張表格，看 <b>β</b> 那一欄。
+</div>
+
+<p>β 的意思是「通膨新聞每高出一個標準差，這個資產的 12 個月報酬會差幾個百分點」。這才是你真正感受得到的數字。</p>
+<p>兩個資產的 ρ 都是 −0.4，但 β 可能一個是 −3%、一個是 −12%。做資產配置時要用 β，不是 ρ。</p>
+
+<h2><span class="n">06</span>第六步：別只看平均，看兩端</h2>
+
+<div class="do">
+<b>動手：</b>捲到工具頁的「<b>非線性形態</b>」區塊。
+</div>
+
+<p>它把歷史切成三段：通膨大跌、平穩、通膨大漲，分別看各資產的表現。你會看到三種形狀：</p>
+
+<dl class="gl">
+<dt>皺眉</dt><dd>兩端都輸，中間才賺。股票是典型——通膨暴漲會輸，通膨崩跌（通常伴隨衰退）也會輸。</dd>
+<dt>線性</dt><dd>通膨上行大賺、下行大虧。商品與 Breakevens 接近這種。<b>它們不是免費的保險</b>，在通縮式衰退裡會反咬你一口。</dd>
+<dt>微笑</dt><dd>兩端都贏。趨勢跟蹤因為能多能空，在兩個方向的大衝擊中都傾向跑贏。</dd>
+</dl>
+
+<h2><span class="n">07</span>第七步：得出你自己的那句話</h2>
+<p>把前面六步收攏成一個判斷：</p>
+
+<div class="step">
+<b class="t">問自己三個問題</b>
+<p>1. 我的資產<b>集中在哪個象限</b>？（多數人：左上）</p>
+<p>2. 這代表我在賭什麼？（左上＝賭成長好、通膨低）</p>
+<p style="margin:0">3. 如果賭錯了，<b>我手上有什麼能接住</b>？（如果答案是「沒有」，那就是你的缺口）</p>
+</div>
+
+<p>報告自己做這件事的結果是：從全球 60/40 出發，加入通膨連結債、商品與趨勢跟蹤，把組合的通膨敏感度從 <b>−0.23 拉到 −0.02</b>（接近中性），預期年化報酬從 6.1% 到 6.8%，2022 年的模擬虧損從 −15.2% 收斂到 −8.9%。</p>
+
+<div class="box note">
+<p style="margin:0"><b>但這個結果有前提</b>：那多出來的約 70 個基點，來自 AQR 自己對商品與趨勢策略的長期報酬假設（商品 6.9%、趨勢 6.1%）。商品的長期實質報酬在學界爭議很大。<b>如果你不接受這個假設，「免費午餐」就消失了</b>，剩下的只是「降低通膨暴露，代價是報酬持平」。這仍然有意義，但故事沒那麼漂亮。</p>
+</div>
+
+<h2><span class="n">08</span>五個最常見的誤讀</h2>
+
+<div class="step wrong"><b>「通膨高 = 該買抗通膨資產」</b><p style="margin:0">錯在混淆水平與新聞。通膨高但持續下降時，表現最好的是股票，不是商品。</p></div>
+
+<div class="step wrong"><b>「這張圖告訴我該買什麼」</b><p style="margin:0">它告訴你的是「各資產在哪種環境賺錢」，不是「哪種環境會來」。報告作者自己的立場是不要押注通膨的方向。</p></div>
+
+<div class="step wrong"><b>「黃金抗通膨，所以通膨來了黃金一定漲」</b><p style="margin:0">2022 年就沒有。實質利率飆升蓋過了通膨補償。敏感度是統計傾向，不是保證。</p></div>
+
+<div class="step wrong"><b>「相關係數 0.15 也算有關係」</b><p style="margin:0">在這個樣本量下，±0.27 以內都和零沒差別。把 0.15 當成訊號是在讀雜訊。</p></div>
+
+<div class="step wrong"><b>「回測有效 = 我能複製」</b><p style="margin:0">圖上的趨勢跟蹤、各類多空因子都是假設性回測，沒有交易成本與管理費的完整反映，也有事後選擇訊號的空間。</p></div>
+
+<h2><span class="n">09</span>名詞速查</h2>
+<dl class="gl">
+<dt>偏相關</dt><dd>控制住另一個因素後，兩者剩下的相關性。這裡是「排除成長的影響後，資產和通膨的關係」。</dd>
+<dt>通膨新聞</dt><dd>實際通膨減去原本的預期。分成「變化項」（比一年前的年增率高多少）與「意外項」（比專業預測者調查高多少）。</dd>
+<dt>Breakeven</dt><dd>做多抗通膨債（TIPS）、做空同天期名目債。它幾乎是純粹的通膨暴露，數值等於市場隱含的通膨預期。</dd>
+<dt>實質利率</dt><dd>名目利率減去通膨預期。TIPS 的價格主要由它決定。</dd>
+<dt>Regime</dt><dd>宏觀環境的狀態。這裡用通膨新聞與成長新聞誰的 z 值絕對值大，分成通膨主導與成長主導。</dd>
+<dt>趨勢跟蹤</dt><dd>順著過去一段時間的漲跌方向做多或放空，能多能空，所以在大漲大跌兩端都有機會。</dd>
+<dt>60/40</dt><dd>六成股票、四成債券的經典組合。報告的出發點就是它在 2022 年失效。</dd>
+</dl>
+
+<h2><span class="n">10</span>十分鐘速查流程</h2>
+<div class="step">
+<p>1. <a href="#data">數據看板</a>看 z 值 → 現在是什麼環境</p>
+<p>2. 看全項 vs 核心、通膨預期、實質利率 → 通膨的性質是什麼</p>
+<p>3. <a href="#tool">工具</a>勾選自己的資產 → 我在哪個象限</p>
+<p>4. 只看粗體 → 哪些結論站得住</p>
+<p>5. 看 β → 會痛多少</p>
+<p style="margin:0">6. 看非線性 → 最壞情況長什麼樣</p>
+</div>
+
+<p>想深入理解每一步背後的推導，看<a href="#read">報告解讀</a>；想看整套方法的架構，看<a href="#method">方法系統圖</a>。</p>
+
+<footer>本頁為教學用途的整理，報告中的數字來自原文，其餘為獨立推導。僅供研究參考，不構成投資建議。</footer>
+</div>
+</section>
+<section class="view doc" id="view-read" data-view="read">
 <div class="wrap">
 
 
@@ -738,7 +926,7 @@ loadDemo(); renderLibrary(); renderWeights(); run();
 (function(){
   const views=document.querySelectorAll('.view'), tabs=document.querySelectorAll('.tabs a');
   function show(name,scroll){
-    if(!['read','method','tool','data'].includes(name)) name='read';
+    if(!['guide','read','method','tool','data'].includes(name)) name='read';
     views.forEach(v=>v.hidden=v.dataset.view!==name);
     tabs.forEach(t=>t.setAttribute('aria-current',t.dataset.tab===name?'page':'false'));
     if(scroll) window.scrollTo(0,0);
@@ -746,7 +934,7 @@ loadDemo(); renderLibrary(); renderWeights(); run();
   document.addEventListener('click',e=>{
     const a=e.target.closest('a[href^="#"]'); if(!a) return;
     const name=a.getAttribute('href').slice(1);
-    if(['read','method','tool','data'].includes(name)){e.preventDefault();history.replaceState(null,'','#'+name);show(name,true);}
+    if(['guide','read','method','tool','data'].includes(name)){e.preventDefault();history.replaceState(null,'','#'+name);show(name,true);}
   });
   window.addEventListener('hashchange',()=>show(location.hash.slice(1),true));
   show(location.hash.slice(1),false);
@@ -760,7 +948,7 @@ const T=(name,props)=>{try{
   else if(window.gtag)window.gtag('event',name,props);
 }catch(_){}};
 (function(){
- const TABS=['read','method','tool','data'];
+ const TABS=['guide','read','method','tool','data'];
  const seen=new Set([TABS.includes(location.hash.slice(1))?location.hash.slice(1):'read']);
  document.addEventListener('click',e=>{
   const a=e.target.closest('a[href^="#"]');if(!a)return;
@@ -873,6 +1061,19 @@ const T=(name,props)=>{try{
     <div class="tiles">${list.map(i=>tile(d.series[i])).join('')}</div>
     ${chart(list,d.series,unit)}</section>`;
   }
+  // 教學頁的即時數字：跟看板同一份資料，不寫死
+  (function(){
+   const g=(id,f)=>{const S=d.series[id];return S?f(S):'—'};
+   const pct=id=>g(id,S=>S.latest.value.toFixed(2)+'%');
+   const map={
+    z: n?(n.z>0?'+':'')+n.z.toFixed(2):'—',
+    regime: n?n.regime:'—',
+    date: n?n.date:'—',
+    cpi: pct('CPIAUCSL'), core: pct('CPILFESL'),
+    be5: pct('T5YIE'), real10: pct('DFII10')};
+   document.querySelectorAll('[data-live]').forEach(el=>{
+    const v=map[el.dataset.live]; if(v!=null)el.textContent=v});
+  })();
   document.getElementById('dash').innerHTML=h;
   document.getElementById('dashfoot').innerHTML=
    `數據來源：${esc(d.source)}，每日自動檢查，資料最後變動於 ${esc(d.updated)}。`

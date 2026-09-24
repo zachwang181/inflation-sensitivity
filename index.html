@@ -208,8 +208,9 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","
 #view-data .rd b{font-weight:500;margin-left:8px}
 #view-data .cv{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
 #view-data .cv text.ax{font-size:9.5px;fill:var(--muted);font-family:ui-monospace,Menlo,monospace}
-#view-data .cv polyline.dim{opacity:.13}
-#view-data .cv g[data-s].dim{opacity:.13}
+#view-data .cv polyline.hl{stroke-width:3.4}
+#view-data .cv g[data-s].hl text{font-weight:700}
+#view-data .cv g[data-s].hl circle{r:4}
 #view-data .tile{all:unset;box-sizing:border-box;display:block;width:100%;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 16px;transition:border-color .12s}
 #view-data .tile:hover{border-color:var(--muted)}
 #view-data .tile.on{border-color:var(--ochre);box-shadow:inset 0 0 0 1px var(--ochre)}
@@ -1203,8 +1204,12 @@ const T=(name,props)=>{try{
   // 聚焦：教學步驟與點擊卡片／圖例共用同一套 highlight
   function applyFocus(ch,ids){
    const on=ids&&ids.length;
-   ch.querySelectorAll('.cv polyline[data-s],.cv g[data-s]').forEach(el=>
-    el.classList.toggle('dim',!!(on&&!ids.includes(el.dataset.s))));
+   const svg=ch.querySelector('.cv'),hv=svg&&svg.querySelector('[data-hv]');
+   ch.querySelectorAll('.cv polyline[data-s],.cv g[data-s]').forEach(el=>{
+    const lit=!!(on&&ids.includes(el.dataset.s));
+    el.classList.toggle('hl',lit);
+    if(lit&&hv)svg.insertBefore(el,hv);   // 移到最上層，避免被其他線壓住
+   });
    const grp=ch.closest('.grp');
    if(grp)grp.querySelectorAll('.tile').forEach(t=>t.classList.toggle('on',!!(on&&ids.includes(t.dataset.s))));
    ch.querySelectorAll('.lg').forEach(l=>l.classList.toggle('on',!!(on&&ids.includes(l.dataset.s))));
